@@ -9,7 +9,7 @@
  * phpcs:disable WordPress.WP.AlternativeFunctions.curl_curl_setopt -- Intentional to add settings not available via WP_HTTP
  */
 
-namespace Altis\mTLS;
+namespace Kaplan\MTLS;
 
 use Altis;
 use WP_Error;
@@ -27,28 +27,28 @@ function get_certs() : ?array {
 	}
 
 	// Check application secrets store.
-	if ( getenv( 'USER_PROC_CLIENT_CERT' ) ) {
+	if ( getenv( 'USER_MTLS_CLIENT_CERT' ) ) {
 		$certs = [
-			'cert' => getenv( 'USER_PROC_CLIENT_CERT' ),
-			'key' => getenv( 'USER_PROC_CLIENT_KEY' ),
-			'cainfo' => getenv( 'USER_PROC_CLIENT_CAINFO' ),
+			'cert' => getenv( 'USER_MTLS_CLIENT_CERT' ),
+			'key' => getenv( 'USER_MTLS_CLIENT_KEY' ),
+			'cainfo' => getenv( 'USER_MTLS_CLIENT_CAINFO' ),
 		];
 	}
 
 	// Check local file system.
-	if ( empty( $certs ) && is_readable( Altis\ROOT_DIR . '/.config/certs/proc.crt' ) ) {
+	if ( empty( $certs ) && is_readable( Altis\ROOT_DIR . '/.config/certs/mtls.crt' ) ) {
 		$certs = [
-			'cert' => Altis\ROOT_DIR . '/.config/certs/proc.crt',
-			'key' => Altis\ROOT_DIR . '/.config/certs/proc.key',
-			'cainfo' => Altis\ROOT_DIR . '/.config/certs/proc.pem',
+			'cert' => Altis\ROOT_DIR . '/.config/certs/mtls.crt',
+			'key' => Altis\ROOT_DIR . '/.config/certs/mtls.key',
+			'cainfo' => Altis\ROOT_DIR . '/.config/certs/mtls.pem',
 		];
 	}
 
 	if ( empty( $certs ) ) {
 		if ( Altis\get_environment_type() === 'local' ) {
-			trigger_error( 'Could not find PROC certificates. Please ensure the proc.crt, proc.key and proc.pem files have been added to .config/certs.', E_USER_WARNING );
+			trigger_error( 'Could not find mTLS certificates. Please ensure the mtls.crt, mtls.key and mtls.pem files have been added to .config/certs.', E_USER_WARNING );
 		} else {
-			trigger_error( 'Could not find PROC certificates. Please ensure the PROC_CLIENT_CERT, PROC_CLIENT_KEY and PROC_CLIENT_CAINFO secrets are set in the Altis dashboard and a redeploy has been done.', E_USER_WARNING );
+			trigger_error( 'Could not find mTLS certificates. Please ensure the MTLS_CLIENT_CERT, MTLS_CLIENT_KEY and MTLS_CLIENT_CAINFO secrets are set in the Altis dashboard and a redeploy has been done.', E_USER_WARNING );
 		}
 	}
 
@@ -63,7 +63,7 @@ function get_certs() : ?array {
  * @return void
  */
 function add_certs( &$handle, $args ) {
-	if ( ! isset( $args['_add_proc_certs'] ) ) {
+	if ( ! isset( $args['_add_mtls_certs'] ) ) {
 		return;
 	}
 
@@ -84,7 +84,7 @@ function add_certs( &$handle, $args ) {
 function request( string $url, array $args = [] ) {
 
 	$args = wp_parse_args( $args, [
-		'_add_proc_certs' => true,
+		'_add_mtls_certs' => true,
 	] );
 
 	add_action( 'http_api_curl', __NAMESPACE__ . '\\add_certs', 10, 2 );
