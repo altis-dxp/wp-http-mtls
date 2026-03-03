@@ -17,7 +17,7 @@ Download this repo and upload to your plugins or mu-plugins directory, and activ
 ### Via Composer
 
 ```bash
-composer require altis-dxp/wp-http-mtls
+composer require altis/wp-http-mtls
 ```
 
 ## Usage
