@@ -9,7 +9,7 @@
  * phpcs:disable WordPress.WP.AlternativeFunctions.curl_curl_setopt -- Intentional to add settings not available via WP_HTTP
  */
 
-namespace Kaplan\MTLS;
+namespace Altis\mTLS;
 
 use Altis;
 use WP_Error;
