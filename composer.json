@@ -1,0 +1,15 @@
+{
+    "name": "altis/wp-http-mtls",
+    "description": "WP HTTP Mutual TLS connection helper",
+    "type": "wordpress-plugin",
+    "require": {
+        "composer/installers": "^1 || ^2"
+    },
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Altis DXP",
+            "email": "engineering@altis-dxp.com"
+        }
+    ]
+}
